@@ -11,17 +11,17 @@ describe("Core Game Logic", () => {
   test("initializeGame creates correct initial state", () => {
     expect(initialGameState.players.length).toBe(4);
     expect(initialGameState.currentPlayerIndex).toBe(0);
-    expect(initialGameState.wallTiles.length).toBe(144 - 13 * 4 - 14); // 144 total tiles, 13 per player, 14 for dead wall
+    expect(initialGameState.wallTiles.tilesRemaining()).toBe(144 - 13 * 4 - 14); // 144 total tiles, 13 per player, 14 for dead wall
     expect(initialGameState.discardPile.length).toBe(0);
   });
 
   test("drawTile removes a tile from wall and adds to player hand", () => {
-    const initialWallSize = initialGameState.wallTiles.length;
+    const initialWallSize = initialGameState.wallTiles.tilesRemaining();
     const initialHandSize = initialGameState.players[0].hand.length;
 
     const newGameState = drawTile(initialGameState, 0);
 
-    expect(newGameState.wallTiles.length).toBe(initialWallSize - 1);
+    expect(newGameState.wallTiles.tilesRemaining()).toBe(initialWallSize - 1);
     expect(newGameState.players[0].hand.length).toBe(initialHandSize + 1);
   });
 

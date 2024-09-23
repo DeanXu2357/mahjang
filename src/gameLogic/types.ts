@@ -1,4 +1,4 @@
-enum SuitEnum {
+export enum SuitEnum {
   Honors = "honors",
   Dots = "dots",
   Bamboo = "bamboo",
@@ -101,7 +101,7 @@ class MahjongTile implements Tile {
       return false;
     }
     const values = [this.value, second.getValue(), third.getValue()].sort(
-      (a, b) => a - b,
+      (a, b) => a - b
     );
     return values[0] + 1 === values[1] && values[1] + 1 === values[2];
   }
