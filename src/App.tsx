@@ -1,12 +1,15 @@
 import React from "react";
 import { GameState, Player, Tile, SuitEnum } from "./gameLogic/types";
 import { initializeGame } from "./gameLogic/core";
-import { getSvgComponent } from "./tiles";
+import { getSvgComponent, SvgNumber } from "./tiles";
 
 const TileComponent: React.FC<{ tile: Tile }> = ({ tile }) => (
   <div className="w-12 h-16 bg-gradient-to-br from-white to-gray-100 border border-gray-300 rounded-md shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center text-lg font-bold relative overflow-hidden">
     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white to-transparent opacity-50"></div>
-    <img src={getSvgComponent(1)} className="w-10 h-14 relative z-10" />
+    <img
+      src={getSvgComponent(tile.id as SvgNumber)}
+      className="w-10 h-14 relative z-10"
+    />
   </div>
 );
 

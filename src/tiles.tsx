@@ -70,9 +70,10 @@ const svgComponents = {
   34: Svg34,
 };
 
-type SvgNumber = keyof typeof svgComponents;
+export type SvgNumber = keyof typeof svgComponents;
 
 export function getSvgComponent(number: SvgNumber) {
+  console.log(number);
   return svgComponents[number];
 }
 
