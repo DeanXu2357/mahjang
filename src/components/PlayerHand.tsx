@@ -1,17 +1,19 @@
+import { discardTile } from "../gameLogic/core";
 import { Player, Tile } from "../gameLogic/types";
+import { useStore } from "../store";
 import { TileComponent } from "./TileComponent";
 
 interface TileComponentProps {
   player: Player;
   position: string;
-  onDiscard?: (tile: Tile) => void;
 }
 
 export const PlayerHand: React.FC<TileComponentProps> = ({
   player,
   position,
-  onDiscard,
 }) => {
+  const store = useStore();
+  console.log(store.state.discardPile);
   const positionClasses = {
     top: "flex-row justify-center",
     right: "flex-col items-center",
@@ -31,6 +33,11 @@ export const PlayerHand: React.FC<TileComponentProps> = ({
     right: "-space-y-6",
     bottom: "-space-x-0",
     left: "-space-y-6",
+  };
+
+  const handleDiscard = (tile: Tile) => {
+    console.log("habndle discuard");
+    store.update(discardTile(store.state, player.id, tile));
   };
 
   return (
@@ -65,7 +72,7 @@ export const PlayerHand: React.FC<TileComponentProps> = ({
             <TileComponent
               tile={tile}
               rotation={rotations[position as keyof typeof rotations]}
-              onDiscard={onDiscard}
+              onDiscard={handleDiscard}
             />
           </div>
         ))}
