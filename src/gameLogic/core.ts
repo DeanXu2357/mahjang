@@ -3,15 +3,20 @@ import {
   Player,
   Tile,
   Wall,
+  createWall,
+  drawTile as drawTileFromWall,
+  shuffleWall,
+  tilesRemaining,
   characterTiles,
   bambooTiles,
   dotTiles,
   flowerTiles,
   honorTiles,
 } from "./types";
+import { shuffleTiles } from "./utils";
 
 export function initializeGame(numPlayers: number): GameState {
-  const walls = new MahjongWall([
+  const wall = createWall([
     ...characterTiles,
     ...bambooTiles,
     ...dotTiles,
@@ -28,9 +33,11 @@ export function initializeGame(numPlayers: number): GameState {
       exposedSets: [],
     }));
 
+  let updatedWall = wall;
   for (let i = 0; i < 13; i++) {
     for (let j = 0; j < numPlayers; j++) {
-      const tile = walls.drawTile();
+      const [tile, newWall] = drawTileFromWall(updatedWall);
+      updatedWall = newWall;
       if (tile) {
         players[j].hand.push(tile);
       }
@@ -40,7 +47,7 @@ export function initializeGame(numPlayers: number): GameState {
   return {
     players: players,
     currentPlayerIndex: 0,
-    wallTiles: walls,
+    wallTiles: updatedWall,
     discardPile: [],
     dora: [],
     round: 1,
@@ -48,49 +55,16 @@ export function initializeGame(numPlayers: number): GameState {
   };
 }
 
-class MahjongWall implements Wall {
-  private tiles: Tile[];
-  private nextTileIndex: number;
-
-  constructor(tiles: Tile[]) {
-    this.tiles = [...tiles]; // Create a copy of the passed array
-    this.nextTileIndex = 0;
-    this.shuffle(); // Shuffle the wall upon creation
-  }
-
-  drawTile(): Tile | undefined {
-    if (this.nextTileIndex < this.tiles.length) {
-      const tile = this.tiles[this.nextTileIndex];
-      this.nextTileIndex++;
-      return tile;
-    }
-    return undefined; // No more tiles to draw
-  }
-
-  shuffle(): void {
-    for (let i = this.tiles.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [this.tiles[i], this.tiles[j]] = [this.tiles[j], this.tiles[i]];
-    }
-    this.nextTileIndex = 0; // Reset the indicator after shuffling
-  }
-
-  tilesRemaining(): number {
-    return this.tiles.length - this.nextTileIndex;
-  }
-}
-
-// Shuffle function (Fisher-Yates algorithm)
-function shuffleArray<T>(array: T[]): T[] {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
 export function drawTile(gameState: GameState, playerId: number): GameState {
-  return { ...gameState };
+  const player = gameState.players.find((p) => p.id === playerId);
+  if (player) {
+    const [tile, newWall] = drawTileFromWall(gameState.wallTiles);
+    if (tile) {
+      player.hand.push(tile);
+    }
+    return { ...gameState, wallTiles: newWall };
+  }
+  return gameState;
 }
 
 export function discardTile(
@@ -98,6 +72,14 @@ export function discardTile(
   playerId: number,
   tile: Tile,
 ): GameState {
+  const player = gameState.players.find((p) => p.id === playerId);
+  if (player) {
+    const tileIndex = player.hand.findIndex((t) => t.id === tile.id);
+    if (tileIndex !== -1) {
+      player.hand.splice(tileIndex, 1);
+      gameState.discardPile.push(tile);
+    }
+  }
   return { ...gameState };
 }
 
@@ -106,10 +88,12 @@ export function claimTile(
   claimingPlayerId: number,
   action: "chow" | "pong" | "kong" | "win",
 ): GameState {
+  // Implementation depends on game rules and additional context
   return { ...gameState };
 }
 
 export function checkWin(player: Player, lastTile: Tile): boolean {
+  // Implement win condition check logic here
   return false;
 }
 
@@ -118,13 +102,18 @@ export function scoreHand(
   lastTile: Tile,
   gameState: GameState,
 ): number {
+  // Implement scoring logic here
   return 0;
 }
 
 export function nextTurn(gameState: GameState): GameState {
-  return { ...gameState };
+  return {
+    ...gameState,
+    currentPlayerIndex: (gameState.currentPlayerIndex + 1) % gameState.players.length,
+  };
 }
 
 export function isGameOver(gameState: GameState): boolean {
+  // Implement game over condition check here
   return false;
 }
