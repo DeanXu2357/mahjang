@@ -4,8 +4,9 @@ import { initializeGame } from "./gameLogic/core";
 import { getSvgComponent } from "./tiles";
 
 const TileComponent: React.FC<{ tile: Tile }> = ({ tile }) => (
-  <div className="w-12 h-16 bg-white border border-gray-300 rounded flex items-center justify-center text-lg font-bold">
-    <img src={getSvgComponent(1)} className="w-10 h-14" />
+  <div className="w-12 h-16 bg-gradient-to-br from-white to-gray-100 border border-gray-300 rounded-md shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center text-lg font-bold relative overflow-hidden">
+    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white to-transparent opacity-50"></div>
+    <img src={getSvgComponent(1)} className="w-10 h-14 relative z-10" />
   </div>
 );
 
@@ -26,7 +27,7 @@ const PlayerHand: React.FC<{ player: Player }> = ({ player }) => (
 );
 
 const GameBoard: React.FC<{ gameState: GameState }> = ({ gameState }) => (
-  <div className="flex flex-col items-center bg-green-100 p-6 rounded-lg">
+  <div className="flex flex-col items-center bg-green-100 p-6 rounded-lg shadow-lg">
     <div className="grid grid-cols-2 gap-12 mb-12">
       {gameState.players.map((player) => (
         <PlayerHand key={player.id} player={player} />
@@ -65,7 +66,7 @@ const MahjongGame: React.FC = () => {
     <div className="container mx-auto p-6">
       <h1 className="text-4xl font-bold mb-6">Mahjong Game</h1>
       <GameBoard gameState={gameState} />
-      <div className="mt-6 p-4 bg-yellow-100 rounded-lg flex items-center">
+      <div className="mt-6 p-4 bg-yellow-100 rounded-lg flex items-center shadow-md">
         <div className="w-8 h-8 bg-yellow-500 rounded-full mr-3 flex items-center justify-center text-white font-bold text-lg">
           !
         </div>
