@@ -14,7 +14,7 @@ export type GameState = {
   dora: Tile[];
   round: number;
   prevailingWind: string;
-}
+};
 
 export type Tile = {
   id: number;
@@ -33,42 +33,6 @@ export type Wall = {
   tiles: Tile[];
   nextTileIndex: number;
 };
-
-export function createWall(tiles: Tile[]): Wall {
-  return {
-    tiles: shuffleTiles([...tiles]),
-    nextTileIndex: 0,
-  };
-}
-
-export function drawTile(wall: Wall): [Tile | undefined, Wall] {
-  if (wall.nextTileIndex < wall.tiles.length) {
-    const tile = wall.tiles[wall.nextTileIndex];
-    return [tile, { ...wall, nextTileIndex: wall.nextTileIndex + 1 }];
-  }
-  return [undefined, wall];
-}
-
-export function shuffleWall(wall: Wall): Wall {
-  return {
-    ...wall,
-    tiles: shuffleTiles(wall.tiles),
-    nextTileIndex: 0,
-  };
-}
-
-export function shuffleTiles(tiles: Tile[]): Tile[] {
-  const shuffledTiles = [...tiles];
-  for (let i = shuffledTiles.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffledTiles[i], shuffledTiles[j]] = [shuffledTiles[j], shuffledTiles[i]];
-  }
-  return shuffledTiles;
-}
-
-export function tilesRemaining(wall: Wall): number {
-  return wall.tiles.length - wall.nextTileIndex;
-}
 
 export const getValue = (tile: Tile): number => tile.value;
 
