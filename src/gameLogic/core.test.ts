@@ -28,9 +28,9 @@ import {
 } from "./types";
 import {
   findValidChows,
+  findValidKongs,
   findValidPongs,
   sortTiles,
-  tilesToString,
 } from "./utils";
 
 test("initializeGame should set up the game correctly", () => {
@@ -154,4 +154,66 @@ test("findValidPong should correctly identify if able to pong", () => {
   ];
   const validPong2 = findValidPongs(hand2, tileBamboo2);
   expect(validPong2).toBeTruthy();
+
+  const hand3 = [
+    tileBamboo1,
+    tileBamboo1,
+    tileBamboo1,
+    tileBamboo4,
+    tileCharacter1,
+    tileCharacter2,
+    tileCharacter3,
+    tileDot1,
+    tileDot2,
+    tileDot4,
+    tileDot5,
+    tileHonorEast,
+    tileHonorSouth,
+    tileHonorWest,
+    tileHonorNorth,
+  ];
+  const validPong3 = findValidPongs(hand3, tileBamboo1);
+  expect(validPong3).toBeFalsy();
+});
+
+test("findValidKongs should correctly identify valid kongs", () => {
+  const hand2 = [
+    tileBamboo1,
+    tileBamboo2,
+    tileBamboo2,
+    tileBamboo4,
+    tileCharacter1,
+    tileCharacter2,
+    tileCharacter3,
+    tileDot1,
+    tileDot2,
+    tileDot4,
+    tileDot5,
+    tileHonorEast,
+    tileHonorSouth,
+    tileHonorWest,
+    tileHonorNorth,
+  ];
+  const validPong2 = findValidKongs(hand2, tileBamboo2);
+  expect(validPong2).toBeFalsy();
+
+  const hand3 = [
+    tileBamboo1,
+    tileBamboo1,
+    tileBamboo1,
+    tileBamboo4,
+    tileCharacter1,
+    tileCharacter2,
+    tileCharacter3,
+    tileDot1,
+    tileDot2,
+    tileDot4,
+    tileDot5,
+    tileHonorEast,
+    tileHonorSouth,
+    tileHonorWest,
+    tileHonorNorth,
+  ];
+  const validPong3 = findValidKongs(hand3, tileBamboo1);
+  expect(validPong3).toBeTruthy();
 });

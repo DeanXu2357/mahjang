@@ -33,6 +33,11 @@ export function findValidPongs(hand: Tile[], claimTile: Tile): boolean {
         canFormPair(handSorted[i], handSorted[j]) &&
         canFormPair(handSorted[j], claimTile)
       ) {
+        for (let k = j + 1; k < handSorted.length; k++) {
+          if (canFormPair(handSorted[j], handSorted[k])) {
+            return false;
+          }
+        }
         return true;
       }
     }
@@ -42,9 +47,24 @@ export function findValidPongs(hand: Tile[], claimTile: Tile): boolean {
 }
 
 // findValidKongs finds all valid kongs that can be formed from the hand
-export function findValidKongs(hand: Tile[], claimTile: Tile): Tile[][] {
-  // Mock implementation
-  return [];
+export function findValidKongs(hand: Tile[], claimTile: Tile): boolean {
+  const handSorted = sortTiles(hand);
+  for (let i = 0; i < handSorted.length; i++) {
+    for (let j = i + 1; j < handSorted.length; j++) {
+      if (
+        canFormPair(handSorted[i], handSorted[j]) &&
+        canFormPair(handSorted[j], claimTile)
+      ) {
+        for (let k = j + 1; k < handSorted.length; k++) {
+          if (canFormPair(handSorted[j], handSorted[k])) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+
+  return false;
 }
 
 export const getValue = (tile: Tile): number => tile.value;
