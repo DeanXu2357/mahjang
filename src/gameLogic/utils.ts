@@ -25,9 +25,20 @@ export function findValidChows(hand: Tile[], claimTile: Tile): Tile[][] {
 }
 
 // findValidPongs finds all valid pongs that can be formed from the hand
-export function findValidPongs(hand: Tile[], claimTile: Tile): Tile[][] {
-  // Mock implementation
-  return [];
+export function findValidPongs(hand: Tile[], claimTile: Tile): boolean {
+  const handSorted = sortTiles(hand);
+  for (let i = 0; i < handSorted.length; i++) {
+    for (let j = i + 1; j < handSorted.length; j++) {
+      if (
+        canFormPair(handSorted[i], handSorted[j]) &&
+        canFormPair(handSorted[j], claimTile)
+      ) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
 
 // findValidKongs finds all valid kongs that can be formed from the hand
