@@ -7,13 +7,26 @@ import {
 } from "./core";
 import {
   tileBamboo1,
+  tileBamboo2,
+  tileBamboo3,
+  tileBamboo4,
   tileBamboo5,
+  tileCharacter1,
   tileCharacter2,
+  tileCharacter3,
   tileCharacter9,
+  tileDot1,
+  tileDot2,
   tileDot3,
+  tileDot4,
+  tileDot5,
   tileDot9,
+  tileHonorEast,
+  tileHonorNorth,
+  tileHonorSouth,
+  tileHonorWest,
 } from "./types";
-import { sortTiles } from "./utils";
+import { findValidChows, sortTiles, tilesToString } from "./utils";
 
 test("initializeGame should set up the game correctly", () => {
   const initialGameState = initializeGame(4);
@@ -67,4 +80,28 @@ test("sortTiles should correctly sort tiles", () => {
   ];
   const sortedTiles = sortTiles(unsortedTiles);
   expect(sortedTiles).toEqual(expectedSortedTiles);
+});
+test("findValidChows should correctly identify valid chows", () => {
+  const hand = [
+    tileBamboo1,
+    tileBamboo2,
+    tileBamboo3,
+    tileBamboo4,
+    tileCharacter1,
+    tileCharacter2,
+    tileCharacter3,
+    tileDot1,
+    tileDot2,
+    tileDot4,
+    tileDot5,
+    tileHonorEast,
+    tileHonorSouth,
+    tileHonorWest,
+    tileHonorNorth,
+  ];
+  const validChows = findValidChows(hand, tileBamboo2);
+  expect(validChows).toEqual([
+    [tileBamboo1, tileBamboo2, tileBamboo3],
+    [tileBamboo2, tileBamboo3, tileBamboo4],
+  ]);
 });

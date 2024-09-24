@@ -1,20 +1,36 @@
 import { Tile, Wall, SuitEnum, TileIdChineseMap } from "./types";
 
-export function sortHand(hand: Tile[]): Tile[] {
-  // Mock implementation
-  return [...hand];
+export function tilesToString(hand: Tile[]): string[] {
+  const result: string[] = [];
+  for (const tile of hand) {
+    result.push(toString(tile));
+  }
+  return result;
 }
 
+// findValidChows finds all valid chows that can be formed from the hand
 export function findValidChows(hand: Tile[], claimTile: Tile): Tile[][] {
-  // Mock implementation
-  return [];
+  const result: Tile[][] = [];
+
+  const handSorted = sortTiles(hand);
+  for (let i = 0; i < handSorted.length; i++) {
+    for (let j = i + 1; j < handSorted.length; j++) {
+      if (canFormSequence(handSorted[i], handSorted[j], claimTile)) {
+        result.push(sortTiles([handSorted[i], handSorted[j], claimTile]));
+      }
+    }
+  }
+
+  return result;
 }
 
+// findValidPongs finds all valid pongs that can be formed from the hand
 export function findValidPongs(hand: Tile[], claimTile: Tile): Tile[][] {
   // Mock implementation
   return [];
 }
 
+// findValidKongs finds all valid kongs that can be formed from the hand
 export function findValidKongs(hand: Tile[], claimTile: Tile): Tile[][] {
   // Mock implementation
   return [];
