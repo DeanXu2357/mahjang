@@ -2,13 +2,13 @@ import {
   GameState,
   Player,
   Tile,
-  Wall,
   characterTiles,
   bambooTiles,
   dotTiles,
   flowerTiles,
   honorTiles,
 } from "./types";
+import { createWall, drawTileFromWall } from "./utils";
 
 export function initializeGame(numPlayers: number): GameState {
   const wall = createWall([
@@ -50,34 +50,6 @@ export function initializeGame(numPlayers: number): GameState {
   };
 }
 
-function createWall(tiles: Tile[]): Wall {
-  return {
-    tiles: shuffleTiles([...tiles]),
-    nextTileIndex: 0,
-  };
-}
-
-function drawTileFromWall(wall: Wall): [Tile | undefined, Wall] {
-  if (wall.nextTileIndex < wall.tiles.length) {
-    const tile = wall.tiles[wall.nextTileIndex];
-    return [tile, { ...wall, nextTileIndex: wall.nextTileIndex + 1 }];
-  }
-  return [undefined, wall];
-}
-
-function shuffleTiles(tiles: Tile[]): Tile[] {
-  const shuffledTiles = [...tiles];
-  for (let i = shuffledTiles.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffledTiles[i], shuffledTiles[j]] = [shuffledTiles[j], shuffledTiles[i]];
-  }
-  return shuffledTiles;
-}
-
-export function wallTilesRemaining(wall: Wall): number {
-  return wall.tiles.length - wall.nextTileIndex;
-}
-
 export function drawTile(gameState: GameState, playerId: number): GameState {
   const player = gameState.players.find((p) => p.id === playerId);
   if (player) {
@@ -104,6 +76,10 @@ export function discardTile(
     }
   }
   return { ...gameState };
+}
+
+export function tilesRemaining(gameState: GameState): number {
+  return gameState.wallTiles.tiles.length - gameState.wallTiles.nextTileIndex;
 }
 
 export function claimTile(

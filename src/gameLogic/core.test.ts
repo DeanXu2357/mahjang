@@ -1,10 +1,19 @@
 import {
-  initializeGame,
-  drawTile,
   discardTile,
+  drawTile,
+  initializeGame,
   nextTurn,
-  wallTilesRemaining,
+  tilesRemaining,
 } from "./core";
+import {
+  tileBamboo1,
+  tileBamboo5,
+  tileCharacter2,
+  tileCharacter9,
+  tileDot3,
+  tileDot9,
+} from "./types";
+import { sortTiles } from "./utils";
 
 test("initializeGame should set up the game correctly", () => {
   const initialGameState = initializeGame(4);
@@ -13,15 +22,15 @@ test("initializeGame should set up the game correctly", () => {
   expect(initialGameState.players[1].hand.length).toBe(13);
   expect(initialGameState.players[2].hand.length).toBe(13);
   expect(initialGameState.players[3].hand.length).toBe(13);
-  expect(wallTilesRemaining(initialGameState.wallTiles)).toBe(144 - 13 * 4); // 144 total tiles, 13 per player
+  expect(tilesRemaining(initialGameState)).toBe(144 - 13 * 4); // 144 total tiles, 13 per player
 });
 
 test("drawTile should draw a tile for the specified player", () => {
   const initialGameState = initializeGame(4);
-  const initialWallSize = wallTilesRemaining(initialGameState.wallTiles);
+  const initialWallSize = tilesRemaining(initialGameState);
   const newGameState = drawTile(initialGameState, 0);
   expect(newGameState.players[0].hand.length).toBe(14);
-  expect(wallTilesRemaining(newGameState.wallTiles)).toBe(initialWallSize - 1);
+  expect(tilesRemaining(newGameState)).toBe(initialWallSize - 1);
 });
 
 test("discardTile should discard a tile for the specified player", () => {
@@ -38,4 +47,24 @@ test("nextTurn should move to the next player", () => {
   const initialGameState = initializeGame(4);
   const newGameState = nextTurn(initialGameState);
   expect(newGameState.currentPlayerIndex).toBe(1);
+});
+test("sortTiles should correctly sort tiles", () => {
+  const unsortedTiles = [
+    tileBamboo5,
+    tileCharacter2,
+    tileDot3,
+    tileBamboo1,
+    tileCharacter9,
+    tileDot9,
+  ];
+  const expectedSortedTiles = [
+    tileCharacter2,
+    tileCharacter9,
+    tileDot3,
+    tileDot9,
+    tileBamboo1,
+    tileBamboo5,
+  ];
+  const sortedTiles = sortTiles(unsortedTiles);
+  expect(sortedTiles).toEqual(expectedSortedTiles);
 });
